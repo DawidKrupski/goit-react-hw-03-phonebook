@@ -74,11 +74,12 @@ export class App extends React.PureComponent {
     if (!list) return;
 
     try {
-      console.log(JSON.parse(list));
       this.setState(state => ({
         contacts: JSON.parse(list),
       }));
-    } catch {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
