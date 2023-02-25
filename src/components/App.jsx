@@ -3,7 +3,7 @@ import { AddContact } from './AddContact/AddContact';
 import { Filter } from './ContactList/Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 
-export class App extends React.Component {
+export class App extends React.PureComponent {
   state = {
     contacts: [
       { id: 1, name: 'Rosie Simpson', number: '459-12-56' },
@@ -61,6 +61,25 @@ export class App extends React.Component {
       filter: text,
     });
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      const contactListStorage = JSON.stringify(this.state.contacts);
+      window.localStorage.setItem('contact-list', contactListStorage);
+    }
+  }
+
+  componentDidMount() {
+    const list = window.localStorage.getItem('contact-list');
+    if (!list) return;
+
+    try {
+      console.log(JSON.parse(list));
+      this.setState(state => ({
+        contacts: JSON.parse(list),
+      }));
+    } catch {}
+  }
 
   render() {
     return (
